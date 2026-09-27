@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kavya Bist — Developer</title>
+<meta name="description" content="Kavya Bist — 3rd Semester B.Tech CSE Student & Developer. Portfolio of projects, skills, and goals.">
+
+<style>
+  /* ============================================
+     1. RESET & BASE
+     ============================================ */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ============================================
+     2. DESIGN TOKENS
+     — Apple-style blue & white palette:
+       clean white background, soft blue-tinted surfaces,
+       deep navy primary text, steel-blue secondary text,
+       a single confident blue accent used sparingly.
+     ============================================ */
+  :root {
+    --bg: #ffffff;
+    --surface-1: #f4f8fc;
+    --surface-2: #e9f1fb;
+    --border: rgba(10, 41, 79, 0.1);
+    --border-strong: rgba(10, 41, 79, 0.2);
+    --text-primary: #0a1f38;
+    --text-secondary: #4c6b8c;
+    --text-tertiary: #7d95ae;
+    --accent: #0071e3;
+    --accent-dim: rgba(0, 113, 227, 0.1);
+
+    --font-body: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI",
+                 "Helvetica Neue", Inter, system-ui, sans-serif;
+
+    --container: 1080px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Visible keyboard focus for accessibility */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  /* ============================================
+     3. LAYOUT PRIMITIVES
+     ============================================ */
+  .container {
+    width: 100%;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section {
+    padding: 120px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type { border-bottom: none; }
+
+  @media (max-width: 768px) {
+    section { padding: 80px 0; }
+  }
+
+  .eyebrow {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .section-heading {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+    max-width: 640px;
+  }
+
+  /* ============================================
+     4. NAVIGATION
+     ============================================ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .nav-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--text-primary); }
+
+  @media (max-width: 640px) {
+    .nav-links { gap: 18px; }
+    .nav-links li:nth-child(4) { display: none; } /* hide one label on very small screens */
+  }
+
+  /* ============================================
+     5. HERO
+     ============================================ */
+  .hero {
+    padding-top: 140px;
+    padding-bottom: 120px;
+  }
+
+  .hero-name {
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin-bottom: 20px;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.75;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 22px;
+    border-radius: 100px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--text-primary);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    background: var(--accent);
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ============================================
+     6. SKILLS
+     ============================================ */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+
+  .skill-group {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+  }
+
+  .skill-group-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+  }
+
+  .tag {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 100px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .tag:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  /* ============================================
+     7. PROJECTS
+     ============================================ */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 780px) {
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+
+  .project-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .project-label {
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .project-title-link {
+    transition: color 0.2s ease;
+  }
+
+  .project-title-link:hover {
+    color: var(--accent);
+  }
+
+  .project-desc {
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  /* ============================================
+     8. LOOKING FORWARD
+     ============================================ */
+  .forward-card {
+    background: linear-gradient(180deg, var(--surface-1), var(--surface-1));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 56px;
+  }
+
+  @media (max-width: 640px) {
+    .forward-card { padding: 32px; }
+  }
+
+  .forward-text {
+    font-size: clamp(1.2rem, 2.6vw, 1.65rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+    color: var(--text-primary);
+    max-width: 760px;
+  }
+
+  /* ============================================
+     9. CONTACT / FOOTER
+     ============================================ */
+  .contact {
+    padding-bottom: 80px;
+  }
+
+  .contact-heading {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    max-width: 620px;
+  }
+
+  .contact-sub {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin-bottom: 40px;
+  }
+
+  .contact-email {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 8px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .contact-email:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .footer-bottom {
+    margin-top: 100px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover { color: var(--text-primary); }
+
+  .footer-copy {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============================================
+       NAVIGATION
+       ============================================ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="nav-name">Kavya Bist</span>
+      <ul class="nav-links">
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#forward">Goals</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       1. HERO
+       ============================================ -->
+  <header class="hero">
+    <div class="container">
+      <h1 class="hero-name">Kavya Bist</h1>
+      <p class="hero-tagline">3rd Semester B.Tech CSE Student &amp; Developer</p>
+      <p class="hero-bio">
+        I am a 3rd-semester Computer Science student at Reva University, with a strong
+        academic record and a growing interest in software development. I have experience
+        with C and Python and am developing my skills in Data Structures and Algorithms,
+        DBMS, Object-Oriented Programming, and problem-solving. I am also interested in
+        building practical projects and exploring how technology and AI can be used to
+        create efficient and innovative solutions.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">See my work</a>
+        <a href="#contact" class="btn btn-secondary">Get in touch</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       2. SKILLS
+       ============================================ -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-heading">Skills</h2>
+      <div class="skills-grid">
+
+        <div class="skill-group">
+          <h3 class="skill-group-title">Core Programming</h3>
+          <ul class="tag-list">
+            <li class="tag">C</li>
+            <li class="tag">Python</li>
+            <li class="tag">Data Structures &amp; Algorithms</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h3 class="skill-group-title">Design &amp; Tools</h3>
+          <ul class="tag-list">
+            <li class="tag">UI/UX Conceptualization</li>
+            <li class="tag">AI Video Generation</li>
+            <li class="tag">Cinematic Prompting</li>
+          </ul>
+        </div>
+
+        <div class="skill-group">
+          <h3 class="skill-group-title">Workflow</h3>
+          <ul class="tag-list">
+            <li class="tag">Git</li>
+            <li class="tag">GitHub</li>
+            <li class="tag">VS Code</li>
+            <li class="tag">Collaborative Debugging</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       3. PROJECTS & LAB WORK
+       ============================================ -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-heading">Projects &amp; Lab Work</h2>
+      <div class="projects-grid">
+
+        <article class="project-card">
+          <span class="project-label">Repository</span>
+          <h3 class="project-title">
+            <a class="project-title-link" href="https://github.com/kavyabist27/portfolio-building" target="_blank" rel="noopener noreferrer">Foundation Setup</a>
+          </h3>
+          <p class="project-desc">
+            Built a "Hello World" repository to establish my GitHub presence and version
+            control environment.
+          </p>
+        </article>
+
+        <article class="project-card">
+          <span class="project-label">Collaboration</span>
+          <h3 class="project-title">
+            <a class="project-title-link" href="https://github.com/kavyabist27/C-Line-editor" target="_blank" rel="noopener noreferrer">Pair-Programming Collaboration</a>
+          </h3>
+          <p class="project-desc">
+            Executed a documented collaborative coding session utilizing GitLens and Live
+            Share to write, review, and debug code in a team environment.
+          </p>
+        </article>
+
+        <article class="project-card">
+          <span class="project-label">Repository</span>
+          <h3 class="project-title">
+            <a class="project-title-link" href="https://github.com/kavyabist27/leetcode-solutions" target="_blank" rel="noopener noreferrer">Algorithmic Problem Solving</a>
+          </h3>
+          <p class="project-desc">
+            Created and maintained a dedicated LeetCode Solutions repository to rigorously
+            document my ongoing progress in Data Structures and Algorithms.
+          </p>
+        </article>
+
+        <article class="project-card">
+          <span class="project-label">Independent Project</span>
+          <h3 class="project-title">Study to Earn — a Student Token Launchpad</h3>
+          <p class="project-desc">
+            Directed the structural planning, tokenomics, and UI/UX requirements for a
+            platform concept that rewards students with tokens for completing study
+            milestones, which can be redeemed for real opportunities and perks.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       4. LOOKING FORWARD
+       ============================================ -->
+  <section id="forward">
+    <div class="container">
+      <h2 class="section-heading">Looking Forward</h2>
+      <div class="forward-card">
+        <p class="forward-text">
+          My goal is to leverage my core skills in Python and DSA to develop robust
+          software systems, while continuing to explore UI/UX design and AI technologies
+          to create highly intuitive, user-centric applications.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       5. CONTACT / FOOTER
+       ============================================ -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="contact-heading">Let's build something.</h2>
+      <p class="contact-sub">
+        I'm always open to conversations about software, design, or new project ideas.
+        Reach out directly and I'll get back to you.
+      </p>
+      <a class="contact-email" href="mailto:kavyabist27@gmail.com">
+        kavyabist27@gmail.com
+      </a>
+
+      <div class="footer-bottom">
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/in/kavya-bist-059249384" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://github.com/kavyabist27" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
+        <span class="footer-copy">&copy; 2026 Kavya Bist</span>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
